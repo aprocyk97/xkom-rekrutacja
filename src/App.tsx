@@ -1,57 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { FC, useEffect } from 'react';
+import styled from 'styled-components';
+import { FormPage } from './components/FormPage/FormPage';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
-function App() {
+import { addReservation } from './actions/reservationsActions';
+import { useDispatch } from 'react-redux';
+import { getSeats } from './actions/seatActions';
+import { ReservationPage } from './components/SeatMapPage/ReservationPage';
+import { TicketsPage } from './components/TicketsPage/TicketsPage';
+
+const Wrapper = styled.div`
+    max-height: 100vh;
+`;
+
+type GetSeats = ReturnType<typeof getSeats>
+
+export const App: FC = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch<GetSeats>(getSeats())
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Wrapper>
+      <Router>
+        <Switch>
+          <Route exact path='/'>
+            <FormPage />
+          </Route>
+          <Route path='/seats'>
+            <ReservationPage />
+          </Route>
+          <Route path='/tickets'>
+            <TicketsPage />
+          </Route>
+
+        </Switch>
+      </Router>
+
+
+    </Wrapper>
   );
 }
 
